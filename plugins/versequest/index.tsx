@@ -83,7 +83,7 @@ const Container = () => {
   }, {});
 
 
-  const [lastMinedNftId, setLastMinedNftId] = useState(null);
+  const [lastMinedNftId, setLastMinedNftId] = useState(Number);
 
   useEffect(() => {
     for (const texture of Object.values(Textures)) {
@@ -100,7 +100,7 @@ const Container = () => {
       noa.registry.registerBlock(index, block);
     }
 
-    let nfts = new Map();
+    let nfts: Map<string, number> = new Map();
 
     noa.world.on("worldDataNeeded", function (id, data, x, y, z) {
       const MIN_HEIGHT = 64;
@@ -136,7 +136,8 @@ const Container = () => {
 
             const nftIdx = (i + j + k) % Object.keys(Textures).length;
             data.set(i, j, k, 255 - nftIdx);
-            nfts.set([x + i, y + j, z + k], nftIdx);
+            const c = `x${x + i}y${y + j}z${z + k}`;
+            nfts.set(c, nftIdx);
             noa.world.setChunkData(id, data, undefined);
             return;
           }
@@ -150,9 +151,9 @@ const Container = () => {
 
     let old_cb = network.api.mine;
     network.api.mine = async (coord: VoxelCoord) => {
-      let c = [coord.x, coord.y, coord.z];
+      const c = `x${coord.x}y${coord.y}z${coord.z}`;
       if (nfts.has(c)) {
-        setLastMinedNftId(nfts.get(c));
+        setLastMinedNftId(nfts.get(c) as number);
         nfts.delete(c);
       }
       return old_cb(coord);
