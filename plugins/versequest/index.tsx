@@ -83,11 +83,36 @@ const Container = () => {
 
     // register extra blocks
     for (const [key, block] of Object.entries(Blocks)) {
-      const index = BlockTypeIndex[BlockType[key as BlockTypeKey]];
+      const index = BlockTypeIndex[BlockType[key]];
       const augmentedBlock = { ...block };
 
       noa.registry.registerBlock(index, augmentedBlock);
     }
+
+    noa.world.on("worldDataNeeded", function (id, data, x, y, z) {
+      const MIN_HEIGHT = 64;
+
+      // `id` - a unique string id for the chunk
+      // `data` - an `ndarray` of voxel ID data (see: https://github.com/scijs/ndarray)
+      // `x, y, z` - world coords of the corner of the chunk
+      if (y < -MIN_HEIGHT) {
+        noa.world.setChunkData(id, data, undefined);
+        return;
+      }
+      for (let i = 0; i < data.shape[0]; i++) {
+        for (let k = 0; k < data.shape[2]; k++) {
+          for (let j = 0; j < data.shape[1]; j++) {
+            if (data.get(i, j, k, 0) !== 0) {
+              continue
+            }
+
+            data.set(i, j, k, 255 - (i + j + k) % 16);
+            noa.world.setChunkData(id, data, undefined);
+            return;
+          }
+        }
+      }
+    });
 
   }, []);
 
