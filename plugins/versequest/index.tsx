@@ -4,6 +4,7 @@ import { keccak256 } from "@latticexyz/utils";
 import { EntityID } from "@latticexyz/recs";
 
 import { Block, NoaBlockType } from "./types";
+import { createMeshBlock } from "./mesh";
 
 
 const {
@@ -58,22 +59,22 @@ const Container = () => {
   }, {});
 
   const Blocks = {
-    Bull: { type: NoaBlockType.BLOCK, material: Textures.Bull },
-    Chicken: { type: NoaBlockType.BLOCK, material: Textures.Chicken },
-    Chicken1: { type: NoaBlockType.BLOCK, material: Textures.Chicken1 },
-    Chicken2: { type: NoaBlockType.BLOCK, material: Textures.Chicken2 },
-    Cat: { type: NoaBlockType.BLOCK, material: Textures.Cat },
-    Donkey: { type: NoaBlockType.BLOCK, material: Textures.Donkey },
-    Goat: { type: NoaBlockType.BLOCK, material: Textures.Goat },
-    Elephant: { type: NoaBlockType.BLOCK, material: Textures.Elephant },
-    Duck: { type: NoaBlockType.BLOCK, material: Textures.Duck },
-    Hedgehog: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog },
-    Hedgehog1: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog1 },
-    Dog: { type: NoaBlockType.BLOCK, material: Textures.Dog },
-    Goat1: { type: NoaBlockType.BLOCK, material: Textures.Goat1 },
-    Sheep: { type: NoaBlockType.BLOCK, material: Textures.Sheep },
-    Monkey: { type: NoaBlockType.BLOCK, material: Textures.Monkey },
-    Cow: { type: NoaBlockType.BLOCK, material: Textures.Cow },
+    Bull: { type: NoaBlockType.BLOCK, material: Textures.Bull, solid: false, opaque: false },
+    Chicken: { type: NoaBlockType.BLOCK, material: Textures.Chicken, solid: false, opaque: false },
+    Chicken1: { type: NoaBlockType.BLOCK, material: Textures.Chicken1, solid: false, opaque: false },
+    Chicken2: { type: NoaBlockType.BLOCK, material: Textures.Chicken2, solid: false, opaque: false },
+    Cat: { type: NoaBlockType.BLOCK, material: Textures.Cat, solid: false, opaque: false },
+    Donkey: { type: NoaBlockType.BLOCK, material: Textures.Donkey, solid: false, opaque: false },
+    Goat: { type: NoaBlockType.BLOCK, material: Textures.Goat, solid: false, opaque: false },
+    Elephant: { type: NoaBlockType.BLOCK, material: Textures.Elephant, solid: false, opaque: false },
+    Duck: { type: NoaBlockType.BLOCK, material: Textures.Duck, solid: false, opaque: false },
+    Hedgehog: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog, solid: false, opaque: false },
+    Hedgehog1: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog1, solid: false, opaque: false },
+    Dog: { type: NoaBlockType.BLOCK, material: Textures.Dog, solid: false, opaque: false },
+    Goat1: { type: NoaBlockType.BLOCK, material: Textures.Goat1, solid: false, opaque: false },
+    Sheep: { type: NoaBlockType.BLOCK, material: Textures.Sheep, solid: false, opaque: false },
+    Monkey: { type: NoaBlockType.BLOCK, material: Textures.Monkey, solid: false, opaque: false },
+    Cow: { type: NoaBlockType.BLOCK, material: Textures.Cow, solid: false, opaque: false },
   };
 
   useEffect(() => {
@@ -81,10 +82,16 @@ const Container = () => {
       noa.registry.registerMaterial(texture, undefined, texture);
     }
 
+    const scene = noa.rendering.getScene();
+
     // register extra blocks
     for (const [key, block] of Object.entries(Blocks)) {
       const index = BlockTypeIndex[BlockType[key]];
       const augmentedBlock = { ...block };
+
+      const mesh = createMeshBlock(noa, scene, augmentedBlock.material, key, undefined);
+      augmentedBlock.blockMesh = mesh;
+      delete augmentedBlock.material;
 
       noa.registry.registerBlock(index, augmentedBlock);
     }
