@@ -106,6 +106,21 @@ const Container = () => {
         noa.world.setChunkData(id, data, undefined);
         return;
       }
+      let allAir = true;
+      for (let i = 0; i < data.shape[0]; i++) {
+        for (let k = 0; k < data.shape[2]; k++) {
+          for (let j = 0; j < data.shape[1]; j++) {
+            if (data.get(i, j, k, 0) !== 0) {
+              allAir = false;
+            }
+          }
+        }
+      }
+      if (allAir) {
+        noa.world.setChunkData(id, data, undefined);
+        return;
+      }
+
       for (let i = 0; i < data.shape[0]; i++) {
         for (let k = 0; k < data.shape[2]; k++) {
           for (let j = 0; j < data.shape[1]; j++) {
