@@ -4,7 +4,6 @@ import { keccak256, VoxelCoord } from "@latticexyz/utils";
 import { EntityID } from "@latticexyz/recs";
 import styled from "styled-components";
 
-import { Block, NoaBlockType } from "./types";
 import { createMeshBlock } from "./mesh";
 
 
@@ -31,41 +30,44 @@ const P = `
 const Container = () => {
 
   const Textures = {
-    Bull:      'https://ipfs.sea.tube/ipfs/QmWk1ZZppsDQ1RM19oj7AFecgP9P5JgFvRcHpkRbTWk4XR',
-    Cat:       'https://ipfs.sea.tube/ipfs/QmNd4focFu8CNbNqk3W8ZbSD6jawp4cZpcsjgLtfm4BEKU',
-    Chicken1:  'https://ipfs.sea.tube/ipfs/QmYwsHfByxAPebdJuG2b2aJQQTALUN8vv7A5orwyCfsUyp',
-    Chicken2:  'https://ipfs.sea.tube/ipfs/QmYo5ajGoLAaPF144Pzb9wyZKZfVYoNGNUfbVdwjVNvd7K',
-    Chicken:   'https://ipfs.sea.tube/ipfs/QmQ5CLAtvv89ghTS2dvdekW6nzrimp8ZPqDxZf5JkJXnPy',
-    Cow:       'https://ipfs.sea.tube/ipfs/Qmc6Es6Hf3UjDp4qwEkfx7oysL2CTnjS5J2893PsU9FW7s',
-    Dog:       'https://ipfs.sea.tube/ipfs/QmTtxnwbRRazWtox8bFYVmyQPtMxWDWZFD5No87hetzfpZ',
-    Donkey:    'https://ipfs.sea.tube/ipfs/QmWkLP5ft4kjgHpyMyG5CetbBjeQsvfKTNDphpqpCd4Gk7',
-    Duck:      'https://ipfs.sea.tube/ipfs/QmSDjBRyuwPwmngMrM78zSnhT6zSwy4LxrGc4V45b4FS75',
-    Elephant:  'https://ipfs.sea.tube/ipfs/QmVWnn6uWTStsGvVUfqCVn2K9Tq5SdoH4FVq7C2hFE3VcL',
-    Goat1:     'https://ipfs.sea.tube/ipfs/QmVDK2HeagezqEDYzbfHdJuV9zfWtfYzGBCzZfavviKNTq',
-    Goat:      'https://ipfs.sea.tube/ipfs/QmUXy2kWxRX2Vb6FmM1VX2oWMUyEwuHTwfbfHDAvWT74tb',
-    Hedgehog1: 'https://ipfs.sea.tube/ipfs/Qmb8zMh67F8aPZVLh8pt1kfkb49VaKzxrr3EcPDFuCxnVG',
-    Hedgehog:  'https://ipfs.sea.tube/ipfs/QmRkMeqE6bXVw26kaYDFFJEQwwhufenvDPxSK8AFk2wUBt',
-    Monkey:    'https://ipfs.sea.tube/ipfs/QmfNcVm8jtVhyMLNG8Lr9bBbMXvy3cPmWMqKhuFQ77e44L',
-    Sheep:     'https://ipfs.sea.tube/ipfs/QmWjxJpmqkVQAAwRj6kQ6ZRK6SeHuPFgHop3PXVKGUaWRC',
+    Bear:     'https://ipfs.sea.tube/ipfs/QmcTZavrnQSW2rDk1agh71MZ7Mi7gF5eLehKiQBdUipoRc',
+    Bull:     'https://ipfs.sea.tube/ipfs/QmbwBpX8m9YrASsJBcQLm4coeWkrE7UhWtiGYoa5LHtYct',
+    Chicken:  'https://ipfs.sea.tube/ipfs/QmesESySjgcKrtXiWFUiyd8YTszECR56ZJzF7355nMWmob',
+    Cow:      'https://ipfs.sea.tube/ipfs/QmRPfhWkLV5oAq5qfLmaCciuFMwsoUfsnpnRvbPSKfEbDf',
+    Dog:      'https://ipfs.sea.tube/ipfs/QmdXgLn1juts7g7RHvQTFi9bBs44agyAp2Q1rBzNPPLAPq',
+    Donkey:   'https://ipfs.sea.tube/ipfs/QmXUGAEcX8Nq6WfNjRwDrg7GMNszepmZekwGxUex2uJ8t4',
+    Duck:     'https://ipfs.sea.tube/ipfs/QmcsF5w2SPbbjhFR2V5PvhLqbBLSHxc82vEgkYticGgKXq',
+    Elephant: 'https://ipfs.sea.tube/ipfs/QmRJsDyeUjSyn8sAm4sVQAtnBw3e39W1d1G6VTo78EchVz',
+    Goat:     'https://ipfs.sea.tube/ipfs/QmRafKu1SwzgKGU4BWxQDouhuT3Wi5NFP1cPVWkjvrVpas',
+    Hedgehog: 'https://ipfs.sea.tube/ipfs/QmYKzVZQRM5s7z5v2moU1UtYEANw4ttidWFrsuUfH2oTPk',
+    Horse:    'https://ipfs.sea.tube/ipfs/Qmdk7J4mhLFqFF1BASsiQFqvfRPzbajJPkQEWAnFGGZsBP',
+    Monkey:   'https://ipfs.sea.tube/ipfs/Qmd8QBnJKyHvezHwz3yBH8WufqYHKtihG7HCPTzSgHRiaZ',
+    Mouse:    'https://ipfs.sea.tube/ipfs/QmVLCphEVKC13yiS4sffAYtpdipmEnzu4aXpTEKJXPJsy6',
+    Panda:    'https://ipfs.sea.tube/ipfs/QmUD5MrTZjcCVdGdEpHetEGT9tMG5mWNWzg6r9C8bn2cyi',
+    Pig:      'https://ipfs.sea.tube/ipfs/QmWFxhSubrZaEz4AVvQhKwLr5WGdronwCbTRBw6r4jPSgK',
+    Rabbit:   'https://ipfs.sea.tube/ipfs/QmWbxKj7zFPQNZekoJ82wQgvEkomGMq4vY1FWArY2N6V8b',
+    Raccoon:  'https://ipfs.sea.tube/ipfs/QmYrpUNasPZuNaCEAXMcFstj7bGEwK4txyiPitSz4v2PVp',
+    Sheep:    'https://ipfs.sea.tube/ipfs/Qmdtif1pKATYoNEGBrmDfoaqVseLmoaNjABzgKCP8SD4Ew',
   };
 
   const BlockType = {
-    Bull:      keccak256("block.Bull") as EntityID,
-    Cat:       keccak256("block.Cat") as EntityID,
-    Chicken1:  keccak256("block.Chicken1") as EntityID,
-    Chicken2:  keccak256("block.Chicken2") as EntityID,
-    Chicken:   keccak256("block.Chicken") as EntityID,
-    Cow:       keccak256("block.Cow") as EntityID,
-    Dog:       keccak256("block.Dog") as EntityID,
-    Donkey:    keccak256("block.Donkey") as EntityID,
-    Duck:      keccak256("block.Duck") as EntityID,
-    Elephant:  keccak256("block.Elephant") as EntityID,
-    Goat1:     keccak256("block.Goat1") as EntityID,
-    Goat:      keccak256("block.Goat") as EntityID,
-    Hedgehog1: keccak256("block.Hedgehog1") as EntityID,
-    Hedgehog:  keccak256("block.Hedgehog") as EntityID,
-    Monkey:    keccak256("block.Monkey") as EntityID,
-    Sheep:     keccak256("block.Sheep") as EntityID,
+    Bull:     keccak256("block.Bull") as EntityID,
+    Chicken:  keccak256("block.Chicken") as EntityID,
+    Cow:      keccak256("block.Cow") as EntityID,
+    Dog:      keccak256("block.Dog") as EntityID,
+    Donkey:   keccak256("block.Donkey") as EntityID,
+    Duck:     keccak256("block.Duck") as EntityID,
+    Elephant: keccak256("block.Elephant") as EntityID,
+    Goat:     keccak256("block.Goat") as EntityID,
+    Hedgehog: keccak256("block.Hedgehog") as EntityID,
+    Horse:    keccak256("block.Horse") as EntityID,
+    Monkey:   keccak256("block.Monkey") as EntityID,
+    Mouse:    keccak256("block.Mouse") as EntityID,
+    Panda:    keccak256("block.Panda") as EntityID,
+    Pig:      keccak256("block.Pig") as EntityID,
+    Rabbit:   keccak256("block.Rabbit") as EntityID,
+    Raccoon:  keccak256("block.Raccoon") as EntityID,
+    Sheep:    keccak256("block.Sheep") as EntityID,
   };
 
   const BlockTypeIndex = Object.values(BlockType).reduce<{ [key: string]: number }>((acc, id, index) => {
@@ -79,25 +81,6 @@ const Container = () => {
   }, {});
 
 
-  const Blocks = {
-    Bull: { type: NoaBlockType.BLOCK, material: Textures.Bull, solid: false, opaque: false },
-    Chicken: { type: NoaBlockType.BLOCK, material: Textures.Chicken, solid: false, opaque: false },
-    Chicken1: { type: NoaBlockType.BLOCK, material: Textures.Chicken1, solid: false, opaque: false },
-    Chicken2: { type: NoaBlockType.BLOCK, material: Textures.Chicken2, solid: false, opaque: false },
-    Cat: { type: NoaBlockType.BLOCK, material: Textures.Cat, solid: false, opaque: false },
-    Donkey: { type: NoaBlockType.BLOCK, material: Textures.Donkey, solid: false, opaque: false },
-    Goat: { type: NoaBlockType.BLOCK, material: Textures.Goat, solid: false, opaque: false },
-    Elephant: { type: NoaBlockType.BLOCK, material: Textures.Elephant, solid: false, opaque: false },
-    Duck: { type: NoaBlockType.BLOCK, material: Textures.Duck, solid: false, opaque: false },
-    Hedgehog: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog, solid: false, opaque: false },
-    Hedgehog1: { type: NoaBlockType.BLOCK, material: Textures.Hedgehog1, solid: false, opaque: false },
-    Dog: { type: NoaBlockType.BLOCK, material: Textures.Dog, solid: false, opaque: false },
-    Goat1: { type: NoaBlockType.BLOCK, material: Textures.Goat1, solid: false, opaque: false },
-    Sheep: { type: NoaBlockType.BLOCK, material: Textures.Sheep, solid: false, opaque: false },
-    Monkey: { type: NoaBlockType.BLOCK, material: Textures.Monkey, solid: false, opaque: false },
-    Cow: { type: NoaBlockType.BLOCK, material: Textures.Cow, solid: false, opaque: false },
-  };
-
   const [lastMinedNftId, setLastMinedNftId] = useState(null);
 
   useEffect(() => {
@@ -108,15 +91,11 @@ const Container = () => {
     const scene = noa.rendering.getScene();
 
     // register extra blocks
-    for (const [key, block] of Object.entries(Blocks)) {
+    for (const [key, material] of Object.entries(Textures)) {
       const index = BlockTypeIndex[BlockType[key]];
-      const augmentedBlock = { ...block };
-
-      const mesh = createMeshBlock(noa, scene, augmentedBlock.material, key, undefined);
-      augmentedBlock.blockMesh = mesh;
-      delete augmentedBlock.material;
-
-      noa.registry.registerBlock(index, augmentedBlock);
+      const blockMesh = createMeshBlock(noa, scene, material, key, undefined);
+      const block = { blockMesh, solid: false, opaque: false };
+      noa.registry.registerBlock(index, block);
     }
 
     let nfts = new Map();
@@ -153,9 +132,9 @@ const Container = () => {
               continue
             }
 
-            data.set(i, j, k, 255 - (i + j + k) % 16);
-            console.log({ x: x + i, y: y + j, z: z + k });
-            nfts.set((x + i, y + j, z + k), (i + j + k) % 16);
+            const nftIdx = (i + j + k) % Object.keys(Textures).len;
+            data.set(i, j, k, 255 - nftIdx);
+            nfts.set((x + i, y + j, z + k), nftIdx);
             noa.world.setChunkData(id, data, undefined);
             return;
           }
