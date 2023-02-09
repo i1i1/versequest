@@ -152,9 +152,9 @@ const Container = () => {
     let old_cb = network.api.mine;
     network.api.mine = async (coord: VoxelCoord) => {
       const c = `x${coord.x}y${coord.y}z${coord.z}`;
-      // if NFT not exist `setLastMinedNftId` will eliminated previous notification
-      setLastMinedNftId(nfts.get(c) as number);
       if (nfts.has(c)) {
+        setLastMinedNftId(nfts.get(c) as number);
+        setTimeout(() => setLastMinedNftId(0), 700);
         nfts.delete(c);
       }
       return old_cb(coord);
