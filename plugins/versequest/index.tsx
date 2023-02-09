@@ -154,7 +154,7 @@ const Container = () => {
       const c = `x${coord.x}y${coord.y}z${coord.z}`;
       if (nfts.has(c)) {
         setLastMinedNftId(nfts.get(c) as number);
-        setTimeout(() => setLastMinedNftId(0), 700);
+        setTimeout(() => setLastMinedNftId(0), 10000);
         nfts.delete(c);
       }
       return old_cb(coord);
