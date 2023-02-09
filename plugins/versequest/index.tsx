@@ -1,7 +1,8 @@
 import { render } from "preact";
-import { useEffect } from "preact/hooks";
-import { keccak256 } from "@latticexyz/utils";
+import { useEffect, useState } from "preact/hooks";
+import { keccak256, VoxelCoord } from "@latticexyz/utils";
 import { EntityID } from "@latticexyz/recs";
+import styled from "styled-components";
 
 import { Block, NoaBlockType } from "./types";
 import { createMeshBlock } from "./mesh";
@@ -9,12 +10,26 @@ import { createMeshBlock } from "./mesh";
 
 const {
   noa: { noa },
+  network,
 } = window.layers;
 
 const ID = "versequest";
 
+const ContainerWrapper = `
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 36px;
+  top: 200px;
+`;
+const P = `
+  line-height: 16px;
+`;
+
+
 // Create React UI
 const Container = () => {
+
   const Textures = {
     Bull:      'https://ipfs.sea.tube/ipfs/QmWk1ZZppsDQ1RM19oj7AFecgP9P5JgFvRcHpkRbTWk4XR',
     Cat:       'https://ipfs.sea.tube/ipfs/QmNd4focFu8CNbNqk3W8ZbSD6jawp4cZpcsjgLtfm4BEKU',
@@ -58,6 +73,12 @@ const Container = () => {
     return acc;
   }, {});
 
+  const BlockIndexToKey = Object.entries(BlockType).reduce<{ [key: number]: BlockTypeKey }>((acc, [key], index) => {
+    acc[255 - index] = key;
+    return acc;
+  }, {});
+
+
   const Blocks = {
     Bull: { type: NoaBlockType.BLOCK, material: Textures.Bull, solid: false, opaque: false },
     Chicken: { type: NoaBlockType.BLOCK, material: Textures.Chicken, solid: false, opaque: false },
@@ -77,6 +98,8 @@ const Container = () => {
     Cow: { type: NoaBlockType.BLOCK, material: Textures.Cow, solid: false, opaque: false },
   };
 
+  const [lastMinedNftId, setLastMinedNftId] = useState(null);
+
   useEffect(() => {
     for (const texture of Object.values(Textures)) {
       noa.registry.registerMaterial(texture, undefined, texture);
@@ -95,6 +118,8 @@ const Container = () => {
 
       noa.registry.registerBlock(index, augmentedBlock);
     }
+
+    let nfts = new Map();
 
     noa.world.on("worldDataNeeded", function (id, data, x, y, z) {
       const MIN_HEIGHT = 64;
@@ -129,16 +154,38 @@ const Container = () => {
             }
 
             data.set(i, j, k, 255 - (i + j + k) % 16);
+            console.log({ x: x + i, y: y + j, z: z + k });
+            nfts.set((x + i, y + j, z + k), (i + j + k) % 16);
             noa.world.setChunkData(id, data, undefined);
             return;
           }
         }
       }
     });
+    let cb = noa.blockTargetIdCheck;
+    noa.blockTargetIdCheck = function (index: number) {
+      return index > (255 - 15) || cb(index);
+    };
+
+    let old_cb = network.api.mine;
+    network.api.mine = async (coord: VoxelCoord) => {
+      let c = (coord.x, coord.y, coord.z);
+      if (nfts.has(c)) {
+        setLastMinedNftId(nfts.get(c));
+        nfts.delete(c);
+      }
+      return old_cb(coord);
+    };
 
   }, []);
 
-  return null;
+  return lastMinedNftId ? (
+    <div style={ContainerWrapper}>
+      <p style={P}>You've mined nft with id={lastMinedNftId}</p>
+    </div>
+  ) : (
+    <div></div>
+  );
 };
 
 
