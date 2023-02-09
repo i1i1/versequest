@@ -125,9 +125,9 @@
     to-fast-properties "^2.0.0"
 
 "@babylonjs/core@^5.29.0":
-  version "5.29.0"
-  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.29.0.tgz#18b80d50e830b97177a2b274d0d6b166617847cf"
-  integrity sha512-1gua7RJ52baX34R2uoO4HeF3l0y4s8nUU5BCbWkmDUPomqbBKaQE0nrvTHkrsHnwzdqZv8bO3Nb2h7SXsMesEA==
+  version "5.45.2"
+  resolved "https://registry.yarnpkg.com/@babylonjs/core/-/core-5.45.2.tgz#9317b3f21fb9530d5ee2f7e487af89c60cf00b24"
+  integrity sha512-BagQP+46ZGJodmVvbiiDvZLOVGl8wNIGeMJ73JfLdvkD/ywkd7nN/nIZqGngp2wQAm+6TTCCH0qyK/EVHPJ6Lw==
 
 "@emotion/is-prop-valid@^1.1.0":
   version "1.2.0"

@@ -12,6 +12,7 @@
     "update:types": "rm -rf types && mkdir types && mkdir types/contracts && cp ../opcraft/packages/client/types/index.d.ts types/ && cp -r ../opcraft/packages/contracts/types types/contracts/"
   },
   "dependencies": {
+    "@babylonjs/core": "^5.29.0",
     "async-mutex": "^0.4.0",
     "contracts": "link:./types/contracts",
     "esbuild": "^0.15.12",
